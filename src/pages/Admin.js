@@ -8,6 +8,7 @@ import Toolbar from '@mui/material/Toolbar';
 import { Outlet } from "react-router";
 import SideMenu from "../layouts/SideMenu";
 import Logo from '../assets/Foreign_Wive_Reigns.png'
+import { Menu } from "@mui/icons-material";
 
 const Admin =  (props)=>{
     const drawerWidth = 255
@@ -41,7 +42,7 @@ const Admin =  (props)=>{
                     ml: { md: `${drawerWidth}px` },
                     }}
                 >
-                <Toolbar className='bg-white text-dark'>
+                <Toolbar className='App'>
                     <IconButton
                         color="inherit"
                         aria-label="open drawer"
@@ -49,9 +50,9 @@ const Admin =  (props)=>{
                         onClick={handleDrawerToggle}
                         sx={{ mr: 2, display: { md: 'none' } }}
                     >
-                        {/* <MenuIcon /> */}
+                        <Menu />
                     </IconButton>
-                    {/* <ProfileBar /> */}
+                    <p className="fs-4 fw-less-bold pt-2">Welcome, Admin</p>
                 </Toolbar>
                 </AppBar>
                 <Box
