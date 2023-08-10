@@ -14,3 +14,28 @@
   color: #181D23 !important;
   font-weight: 700 !important;
 }
+@media screen and (min-width: 1000px) {
+  .main-content {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0
+  }
+}
+.btn-fwr {
+  background-color: #FDFB9F !important;
+  color: #181D23 !important;
+  font-weight: bolder !important;
+}
+::placeholder {
+  color: white !important;
+  font-weight: lighter;
+}
+.bg-fwr {
+  background-color: #FDFB9F !important;
+  color: #181D23 !important;
+}
+.cursor-pointer {
+  cursor: pointer;
+}
