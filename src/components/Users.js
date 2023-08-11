@@ -9,7 +9,7 @@ const Users = ()=>{
                 FWR-Users
             </p>
             <div className="table-responsive">
-                <table className="table table-dark table-borderless table-hoverable animate__animated animate__fadeIn animate__slower">
+                <table className="table table-dark table-borderless table-hoverable">
                     <thead>
                         <tr>
                             <th>S/N</th>
