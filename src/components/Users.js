@@ -1,8 +1,24 @@
 import { Delete } from "@mui/icons-material";
 import { Button } from "@mui/material";
-import React from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
 const Users = ()=>{
+    const api = useSelector(state=>state.url)
+    const [isLoading, setIsLoading] = useState(true)
+    const [error, setError] = useState('')
+    const [users, setUsers] = useState([])
+
+    useEffect(()=>{
+        axios.get(`${api}admin/users`).then((res)=>{
+            console.log(res.data)
+        }).catch((err)=>{
+            console.log(err)
+            setError('Sorry, could not fetch response from the server')
+        })
+    }, [])
+
     return (
         <div className="my-5">
             <p className="fs-5 fw-less-bold pt-2 text-white">
