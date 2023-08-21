@@ -5,7 +5,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import { useLocation, useNavigate } from 'react-router';
-import { Dashboard, Logout, NotificationAdd, SupervisedUserCircle } from '@mui/icons-material';
+import { Dashboard, LocationOnOutlined, Logout, NotificationAdd, SupervisedUserCircle } from '@mui/icons-material';
 
 const SideMenu = ()=>{
     const navigate = useNavigate()
@@ -45,6 +45,20 @@ const SideMenu = ()=>{
                         <ListItemText>
                         <p className={location.pathname == '/admin/notifications' ? 'my-0 fw-bold' : 'my-0'}>
                              Notifications
+                            </p>
+                        </ListItemText>
+                    </ListItemButton>
+                </ListItem>
+            </List>
+            <List>
+                <ListItem disablePadding>
+                    <ListItemButton  onClick={()=>navigate('/admin/chapters')} className={location.pathname == '/admin/chapters' ? 'active' : ''} >
+                        <ListItemIcon>
+                            <LocationOnOutlined className={location.pathname == '/admin/chapters' ? 'text-dark' : 'text-white'} />                            
+                        </ListItemIcon>
+                        <ListItemText>
+                        <p className={location.pathname == '/admin/chapters' ? 'my-0 fw-bold' : 'my-0'}>
+                             Chapters
                             </p>
                         </ListItemText>
                     </ListItemButton>
