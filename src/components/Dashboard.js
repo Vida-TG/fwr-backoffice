@@ -66,7 +66,7 @@ const Dashboard = ()=>{
                     <Paper elevation={3} onClick={()=>navigate('/admin/notifications')} className="cursor-pointer bg-fwr text-white p-4" >
                         <div className="d-flex justify-content-between">
                             <p className="text-start fw-bold fs-3">
-                                Purchases
+                                Chapters
                             </p>
                             <p>
                                 
