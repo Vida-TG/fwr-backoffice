@@ -6,6 +6,7 @@ import Dashboard from './components/Dashboard';
 import Notification from './components/Notifications';
 import Users from './components/Users';
 import Login from './pages/Login';
+import Chapters from './components/Chapters';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route path='/admin' element={<Admin />} >
             <Route path='/admin/' element={<Dashboard />} />
             <Route path='/admin/notifications' element={<Notification />} />
+            <Route path='/admin/chapters' element={<Chapters />} />
             <Route path='/admin/users' element={<Users />} />
           </Route>
         </Routes>
