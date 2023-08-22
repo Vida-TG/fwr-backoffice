@@ -1,14 +1,44 @@
 import { AdminPanelSettings, CardGiftcard, NotificationAddOutlined, SupervisedUserCircleOutlined, UploadFile } from "@mui/icons-material";
 import { Button, Dialog, DialogContent, Paper } from "@mui/material";
-import React, { useState } from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 
 const Dashboard = ()=>{
+    const api = useSelector(state=>state.url)
     const [open, setOpen] = useState(false)
+    const [error, setError] = useState('')
+    const [isLoadingUsers, setIsLoadingUsers] = useState(true)
+    const [isLoadingNotif, setIsLoadingNotif] = useState(true)
+    const [isLoadingChapt, setIsLoadingChapt] = useState(true)
+    const [records, setRecords] = useState({admin: 0, users: 0, notifications: 0, chapters: 0, docs: 0})
     const handleClose = ()=>{
         setOpen(false)
     }
     const navigate = useNavigate()
+
+    useEffect(()=>{
+        axios.get(`${api}admin/notifications`).then(res=>{
+            setRecords({...records, notifications: res.data.notificationCount})    
+            setIsLoadingNotif(false)       
+        }).catch((err)=>{
+            setError(err.name)
+        })
+        axios.get(`${api}admin/users`).then(res=>{
+            setRecords({...records, admin: res.data.adminCount, users: res.data.usersCount}) 
+            setIsLoadingUsers(false)  
+        }).catch((err)=>{
+            setError(err.name)
+        })
+        axios.get(`${api}chapter/chapters`).then(res=>{
+            console.log(res.data)
+            setRecords({...records, chapters: res.data.chapterCount})            
+            setIsLoadingChapt(false)
+        }).catch((err)=>{
+            setError(err.name)
+        })
+    }, [])
     return (
         <div className="my-5">
             <p className="fs-5 text-white fw-less-bold pt-2">
@@ -26,7 +56,17 @@ const Dashboard = ()=>{
                             </p>
                         </div>
                         <p className="text-end fs-1 fw-light">
-                            900
+                            {
+                                isLoadingUsers
+                                ?
+                                <span className="spinner-border fw-bold text-white"></span>
+                                :
+                                error !== ''
+                                ?
+                                <i className="fa fa-exclamation-triangle"></i>
+                                :
+                                records.admin
+                            }
                         </p>
                     </Paper>
                 </div>
@@ -41,7 +81,17 @@ const Dashboard = ()=>{
                             </p>
                         </div>
                         <p className="text-end fs-1 fw-light">
-                            900
+                            {
+                                isLoadingUsers
+                                ?
+                                <span className="spinner-border fw-bold"></span>
+                                :
+                                error !== ''
+                                ?
+                                <i className="fa fa-exclamation-triangle"></i>
+                                :
+                                records.users
+                            }
                         </p>
                     </Paper>
                 </div>
@@ -56,7 +106,19 @@ const Dashboard = ()=>{
                             </p>
                         </div>
                         <p className="text-end fs-1 fw-light">
-                            900
+                            {
+                                isLoadingNotif
+                                ?
+                                <span className="spinner-border fw-bold"></span>
+                                :
+                                error !== ''
+                                ?
+                                <i className="fa fa-exclamation-triangle"></i>
+                                :
+                                error == ''
+                                &&
+                                records.notifications
+                            }
                         </p>
                     </Paper>
                 </div>
@@ -73,7 +135,19 @@ const Dashboard = ()=>{
                             </p>
                         </div>
                         <p className="text-end fs-1 fw-light">
-                            900
+                            {
+                                isLoadingChapt
+                                ?
+                                <span className="spinner-border fw-bold"></span>
+                                :
+                                error !== ''
+                                ?
+                                <i className="fa fa-exclamation-triangle"></i>
+                                :
+                                error == ''
+                                &&
+                                records.chapters
+                            }
                         </p>
                     </Paper>
                 </div>
@@ -88,7 +162,19 @@ const Dashboard = ()=>{
                             </p>
                         </div>                        
                         <p className="text-end fs-1 fw-light">
-                            900
+                            {
+                                isLoadingUsers
+                                ?
+                                <span className="spinner-border fw-bold"></span>
+                                :
+                                error !== ''
+                                ?
+                                <i className="fa fa-exclamation-triangle"></i>
+                                :
+                                error == ''
+                                &&
+                                records.docs
+                            }
                         </p>
                     </Paper>
                 </div>
@@ -103,7 +189,19 @@ const Dashboard = ()=>{
                             </p>
                         </div>
                         <p className="text-end fs-1 fw-light">
-                            900
+                            {
+                                isLoadingUsers
+                                ?
+                                <span className="spinner-border fw-bold"></span>
+                                :
+                                error !== ''
+                                ?
+                                <i className="fa fa-exclamation-triangle"></i>
+                                :
+                                error == ''
+                                &&
+                                0
+                            }
                         </p>
                     </Paper>
                 </div>
