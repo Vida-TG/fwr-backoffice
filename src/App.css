@@ -1,10 +1,15 @@
+@media screen and (min-width: 767px) {
+  .App {
+    background-color: #181D23;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+}
 .App {
   background-color: #181D23;
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
 }
 .sidebar {
   position: absolute;
@@ -34,12 +39,16 @@
   font-weight: bolder !important;
 }
 ::placeholder {
-  color: white !important;
+  color: #FDFB9F !important;
   font-weight: lighter;
+  font-size: small
 }
 .bg-fwr {
   background-color: #FDFB9F !important;
   color: #181D23 !important;
+}
+.text-fwr {
+  color: #FDFB9F !important;
 }
 .cursor-pointer {
   cursor: pointer;
@@ -67,4 +76,7 @@
     max-width: 272px;
     box-shadow: inset 0 0 5px rgba(150, 150 ,150,0.35);  
   }
+}
+.bg-dialog{
+  background-color: #101418;
 }
