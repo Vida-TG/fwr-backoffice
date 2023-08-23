@@ -33,7 +33,7 @@ const Notification = ()=>{
                 notificationTray.length !== 0 && !isLoading
                 ?
                 notificationTray.map((each, i)=>(
-                    <Paper className="bg-dark text-white animate__animated animate__fadeIn animate__slow p-2">                    
+                    <Paper className="bg-dark text-white animate__animated animate__fadeIn animate__slow p-2 my-3">                    
                         <div className="d-flex flex-md-row flex-column">
                             <span className="fw-bold fs-6 text-fwr">New Registration Alert!</span>
                             <span className="fw-light fs-6 text-fwr ps-3">{new Date(each.date).toUTCString()}</span>
