@@ -50,6 +50,9 @@
 .text-fwr {
   color: #FDFB9F !important;
 }
+.border-fwr {
+  border-color: #FDFB9F !important;
+}
 .cursor-pointer {
   cursor: pointer;
 }
@@ -79,4 +82,7 @@
 }
 .bg-dialog{
   background-color: #101418;
+}
+.text-loading {
+  color: #585B5E !important;
 }
