@@ -1,17 +1,20 @@
-import { AdminPanelSettings, CardGiftcard, NotificationAddOutlined, SupervisedUserCircleOutlined, UploadFile } from "@mui/icons-material";
-import { Button, Dialog, DialogContent, Paper } from "@mui/material";
+import { AdminPanelSettings, CreditCard, NotificationAddOutlined, SupervisedUserCircleOutlined, UploadFile } from "@mui/icons-material";
+import { Alert, Button, Dialog, DialogContent, Paper, Snackbar } from "@mui/material";
 import axios from "axios";
+import { useFormik } from "formik";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
+import * as yup from 'yup'
 
 const Dashboard = ()=>{
     const api = useSelector(state=>state.url)
     const [open, setOpen] = useState(false)
     const [error, setError] = useState('')
-    const [isLoadingUsers, setIsLoadingUsers] = useState(true)
-    const [isLoadingNotif, setIsLoadingNotif] = useState(true)
-    const [isLoadingChapt, setIsLoadingChapt] = useState(true)
+    const [addAdminResponse, setAddAdminResponse] = useState('')
+    const [isLoading, setIsLoading] = useState(true)
+    const [isAdding, setIsAdding] = useState(false)
+    const [snackbarOpen, setSnackbarOpen] = useState(false)
     const [records, setRecords] = useState({admin: 0, users: 0, notifications: 0, chapters: 0, docs: 0})
     const handleClose = ()=>{
         setOpen(false)
@@ -19,26 +22,44 @@ const Dashboard = ()=>{
     const navigate = useNavigate()
 
     useEffect(()=>{
-        axios.get(`${api}admin/notifications`).then(res=>{
-            setRecords({...records, notifications: res.data.notificationCount})    
-            setIsLoadingNotif(false)       
-        }).catch((err)=>{
-            setError(err.name)
-        })
-        axios.get(`${api}admin/users`).then(res=>{
-            setRecords({...records, admin: res.data.adminCount, users: res.data.usersCount}) 
-            setIsLoadingUsers(false)  
-        }).catch((err)=>{
-            setError(err.name)
-        })
-        axios.get(`${api}chapter/chapters`).then(res=>{
+        axios.get(`${api}admin/count`).then(res=>{
             console.log(res.data)
-            setRecords({...records, chapters: res.data.chapterCount})            
-            setIsLoadingChapt(false)
+            setRecords({...records, ...res.data.count})    
+            setIsLoading(false)
         }).catch((err)=>{
+            setIsLoading(false)
             setError(err.name)
-        })
+        })       
     }, [])
+    const handleSnackbarClose = ()=>{
+        setSnackbarOpen(false)
+    }
+    const emailForm = useFormik({
+        initialValues: {
+            email: ''
+        },
+        validationSchema: yup.object().shape({
+            email: yup.string().email().required()
+        }),
+        onSubmit: (values)=>{
+            console.log(values)
+            setIsAdding(true)
+            axios.post(`${api}admin/add-admin`, values).then(res=>{
+                setIsAdding(false)
+                if (res.data.status) {
+                    setOpen(false)
+                    setSnackbarOpen(true)
+                    setAddAdminResponse(res.data.message)
+                } else {
+                    setAddAdminResponse(res.data.message)
+                }                
+            }).catch((err)=>{
+                console.log(err)
+                setIsAdding(false)
+                setAddAdminResponse('Something went wrong')
+            })            
+        }
+    })
     return (
         <div className="my-5">
             <p className="fs-5 text-white fw-less-bold pt-2">
@@ -57,7 +78,7 @@ const Dashboard = ()=>{
                         </div>
                         <p className="text-end fs-1 fw-light">
                             {
-                                isLoadingUsers
+                                isLoading
                                 ?
                                 <span className="spinner-border fw-bold text-white"></span>
                                 :
@@ -82,7 +103,7 @@ const Dashboard = ()=>{
                         </div>
                         <p className="text-end fs-1 fw-light">
                             {
-                                isLoadingUsers
+                                isLoading
                                 ?
                                 <span className="spinner-border fw-bold"></span>
                                 :
@@ -107,7 +128,7 @@ const Dashboard = ()=>{
                         </div>
                         <p className="text-end fs-1 fw-light">
                             {
-                                isLoadingNotif
+                                isLoading
                                 ?
                                 <span className="spinner-border fw-bold"></span>
                                 :
@@ -136,7 +157,7 @@ const Dashboard = ()=>{
                         </div>
                         <p className="text-end fs-1 fw-light">
                             {
-                                isLoadingChapt
+                                isLoading
                                 ?
                                 <span className="spinner-border fw-bold"></span>
                                 :
@@ -163,7 +184,7 @@ const Dashboard = ()=>{
                         </div>                        
                         <p className="text-end fs-1 fw-light">
                             {
-                                isLoadingUsers
+                                isLoading
                                 ?
                                 <span className="spinner-border fw-bold"></span>
                                 :
@@ -182,15 +203,15 @@ const Dashboard = ()=>{
                     <Paper elevation={3}  onClick={()=>navigate('/admin/notifications')} className="cursor-pointer bg-fwr text-white p-4" >
                         <div className="d-flex justify-content-between">
                             <p className="text-start fw-bold fs-3">
-                                Wife Cards
+                                Transactions
                             </p>
                             <p>
-                                <CardGiftcard />
+                                <CreditCard />
                             </p>
                         </div>
                         <p className="text-end fs-1 fw-light">
                             {
-                                isLoadingUsers
+                                isLoading
                                 ?
                                 <span className="spinner-border fw-bold"></span>
                                 :
@@ -207,18 +228,34 @@ const Dashboard = ()=>{
                 </div>
             </div>
             {/* Admin-Dialog */}
-            <Dialog open={open} maxWidth={'xs'} fullWidth={true} onClose={handleClose}>
+            <Dialog open={open} maxWidth={'xs'} fullWidth={true}>
                 <DialogContent className="bg-dark">                                        
                         <p className="fs-5 text-white">Add Admin</p>
+                        {!addAdminResponse.includes('added') && addAdminResponse !== '' && <Alert severity="error" className="mb-2">{addAdminResponse}</Alert>}
                     <div className="form-group">
                         <label className="text-white">Email address of the admin you wish to add</label>
-                        <input className="form-control text-white bg-dark" />
+                        <input name="email" onChange={emailForm.handleChange} onBlur={emailForm.handleBlur} className={emailForm.values.email == '' && emailForm.touched.email ? 'form-control text-white bg-dark is-invalid' : 'form-control text-white bg-dark'} />
                     </div>
-                    <Button className="my-2 btn-fwr">
-                        Add Admin
+                    <Button disabled={isAdding} onClick={emailForm.handleSubmit} className={isAdding ? 'my-2 btn-dark rounded-0 text-fwr mx-1' : 'my-2 btn-fwr rounded-0 mx-1'}>
+                        {
+                            isAdding
+                            ?
+                            'Adding Admin...'
+                            :
+                            'Add Admin'
+                        }
+                    </Button>
+                    <Button disabled={isAdding} onClick={handleClose} className="my-2 text-fwr mx-1">
+                        Cancel
                     </Button>
                 </DialogContent>
             </Dialog>
+            {/* snackbar */}
+            <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose}>
+                <Alert onClose={handleSnackbarClose} severity={addAdminResponse.includes('added') ? 'success' : 'error'}>
+                    {addAdminResponse}
+                </Alert>
+            </Snackbar>
         </div>
     )
 }
