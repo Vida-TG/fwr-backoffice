@@ -16,6 +16,9 @@ const Chapters = ()=>{
     const [isCreating, setIsCreating] = useState(false)
     const [snackbarOpen, setSnackbarOpen] = useState(false)
     const [response, setResponse] = useState('')
+    const [isDeleting, setIsDeleting] = useState(false)
+    const [id, setId] = useState({name: '', id: ''})    
+    const [openDelDialog, setOpenDelDialog] = useState(false)
 
     useEffect(()=>{
         axios.get(`${api}chapter/chapters`).then((res)=>{
@@ -29,6 +32,7 @@ const Chapters = ()=>{
     }, [])    
     const handleClose = ()=>{
         setOpen(false)
+        setOpenDelDialog(false)
     }
     const openDialog = ()=>{
         setOpen(true)
@@ -80,14 +84,18 @@ const Chapters = ()=>{
         }
     
         setSnackbarOpen(false);
-      };
+    };
+    const deleteChapter = ()=>{        
+        console.log(id)
+        // setIsDeleting(true)
+    }
 
     return(
         <div className="my-5">
             <div className="container">
-                <div className="d-flex justify-content-between">
+                <div className="d-flex justify-content-between pb-3">
                     <p className="fs-4 text-white fw-less-bold">Chapters</p>
-                    <Button onClick={openDialog} className="text-fwr fw-less-bold fs-7">Create Chapter</Button>
+                    <Button onClick={openDialog} className="text-fwr fw-less-bold fs-7 border border-fwr">Create Chapter</Button>
                 </div>
                 {
                     isLoading
@@ -126,7 +134,12 @@ const Chapters = ()=>{
                                             </Typography>
                                         </CardContent>
                                         <CardActions className="d-flex justify-content-center">
-                                            <Button size="small" className="fw-bold">Delete</Button>
+                                            <Button onClick={()=>{
+                                                setId({name:each.name, id:each.id})
+                                                setOpenDelDialog(true)
+                                            }} size="small" className="fw-bold">
+                                                Delete
+                                            </Button>
                                             {/* <Button size="small">Edit</Button> */}
                                         </CardActions>
                                     </Card>
@@ -166,7 +179,7 @@ const Chapters = ()=>{
                             Create
                         </Button>
                         :
-                        <LoadingButton loading loadingIndicator="Creating..." variant="outlined" className="me-2 fw-bold">
+                        <LoadingButton loading loadingIndicator="Creating..." variant="outlined" className="text-loading me-2 fw-bold">
                             Creating...
                         </LoadingButton>
                     }
@@ -177,8 +190,39 @@ const Chapters = ()=>{
                             Cancel
                         </Button>
                         :
-                        <LoadingButton loading loadingIndicator="Cancel"  variant="outlined" className="`fw-bold">
+                        <LoadingButton loading loadingIndicator="Cancel"  variant="outlined" className="text-loading fw-bold">
                             Cancel
+                        </LoadingButton>
+                    }
+                </DialogContent>
+            </Dialog>
+            {/* Delete Chapter */}
+            <Dialog open={openDelDialog} maxWidth={'xs'} fullWidth={true}>
+                <DialogContent className="bg-dark">
+                    <p className="fs-5 text-white">Delete {id.name} Chapter</p>
+                    <p className="fs-6 text-white">
+                        Are you sure you want to delete this chapter?
+                    </p>
+                    {
+                        !isDeleting
+                        ?
+                        <Button onClick={deleteChapter} className="my-2 btn-fwr me-2">
+                            Yes
+                        </Button>
+                        :
+                        <LoadingButton loading loadingIndicator="Deleting..." variant="outlined" className="me-2 fw-bold text-loading">
+                            Deleting...
+                        </LoadingButton>
+                    }
+                    {
+                        !isDeleting
+                        ?
+                        <Button className="my-2 btn-dark text-fwr ms-2" onClick={handleClose}>
+                            No
+                        </Button>
+                        :
+                        <LoadingButton loading loadingIndicator="No"  variant="outlined" className="text-loading fw-bold">
+                            No
                         </LoadingButton>
                     }
                 </DialogContent>
