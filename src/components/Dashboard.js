@@ -146,7 +146,7 @@ const Dashboard = ()=>{
             </div>
             <div className="row w-100 mx-auto my-5">
                 <div className="col-md-4 animate__animated animate__fadeIn my-md-0 my-1">
-                    <Paper elevation={3} onClick={()=>navigate('/admin/notifications')} className="cursor-pointer bg-fwr text-white p-4" >
+                    <Paper elevation={3} onClick={()=>navigate('/admin/chapters')} className="cursor-pointer bg-fwr text-white p-4" >
                         <div className="d-flex justify-content-between">
                             <p className="text-start fw-bold fs-3">
                                 Chapters
