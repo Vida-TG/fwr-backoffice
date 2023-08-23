@@ -127,7 +127,7 @@ const Users = ()=>{
                             Yes
                         </Button>
                         :
-                        <LoadingButton loading loadingIndicator="Deleting..." variant="outlined" className="me-2 fw-bold">
+                        <LoadingButton loading loadingIndicator="Deleting..." variant="outlined" className="me-2 fw-bold text-loading">
                             Deleting
                         </LoadingButton>
                     }
@@ -138,7 +138,7 @@ const Users = ()=>{
                             No
                         </Button>
                         :
-                        <LoadingButton loading loadingIndicator="Cancel"  variant="outlined" className="`fw-bold">
+                        <LoadingButton loading loadingIndicator="Cancel"  variant="outlined" className="`fw-bold text-loading">
                             No
                         </LoadingButton>
                     }
